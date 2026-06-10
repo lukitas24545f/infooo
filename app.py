@@ -207,7 +207,7 @@ def cargar_estilos():
             align-items: end;
             justify-content: space-between;
             gap: 1rem;
-            margin: 4rem 0 1.5rem;
+            margin: 1.0rem 0 1.5rem;
         }
 
         .resultados-cabecera h2 {
