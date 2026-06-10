@@ -17,6 +17,10 @@ REGIONES = {
 ENFOQUES = {
     "Todo": "",
     "Tecnología": "tecnología",
+    "Deportes": "deportes",
+    "Economía": "economía",
+    "Fútbol": "fútbol",
+    "Básquet": "básquet",
 }
 
 

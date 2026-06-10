@@ -11,9 +11,9 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-TEMAS_TENDENCIA = ["Actualidad", "Tecnología", "Economía", "Ciencia"]
+
 REGIONES = ["Global", "Argentina", "Estados Unidos", "China", "Europa"]
-ENFOQUES = ["Todo", "Tecnología"]
+CATEGORIAS = ["Todo", "Tecnología", "Deportes", "Economía", "Fútbol", "Básquet"]
 
 
 def cargar_estilos():
@@ -341,7 +341,7 @@ def mostrar_filtros(clave):
     with region_col:
         region = st.selectbox("Región", REGIONES, key=f"{clave}_selector_region")
     with enfoque_col:
-        enfoque = st.selectbox("Enfoque", ENFOQUES, key=f"{clave}_selector_enfoque")
+        enfoque = st.selectbox("Categoría", CATEGORIAS, key=f"{clave}_selector_enfoque")
     return region, enfoque
 
 
@@ -351,13 +351,6 @@ def mostrar_explorar():
         unsafe_allow_html=True,
     )
     region, enfoque = mostrar_filtros("explorar")
-
-    columnas = st.columns(len(TEMAS_TENDENCIA))
-    for columna, tema in zip(columnas, TEMAS_TENDENCIA):
-        with columna:
-            if st.button(tema, key=f"tendencia_{tema}", use_container_width=True):
-                obtener_noticias(tema, region, enfoque, "explorar")
-                st.rerun()
 
     filtros_cambiaron = (
         st.session_state.get("explorar_region") != region
