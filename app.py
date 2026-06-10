@@ -307,7 +307,7 @@ def cargar_estilos():
     )
 
 
-def obtener_noticias(tema, region, enfoque, clave):
+def obtener_noticias(tema, region, categoria, clave):
     tema = tema.strip()
     if not tema:
         st.warning("Escribí un tema para comenzar la búsqueda.")
@@ -316,8 +316,8 @@ def obtener_noticias(tema, region, enfoque, clave):
     with st.spinner("Explorando las noticias más recientes..."):
         st.session_state[f"{clave}_tema"] = tema
         st.session_state[f"{clave}_region"] = region
-        st.session_state[f"{clave}_enfoque"] = enfoque
-        st.session_state[f"{clave}_noticias"] = buscar_noticias(tema, region, enfoque)
+        st.session_state[f"{clave}_categoria"] = categoria
+        st.session_state[f"{clave}_noticias"] = buscar_noticias(tema, region, categoria)
 
 
 def mostrar_encabezado():
@@ -337,12 +337,14 @@ def mostrar_encabezado():
 
 
 def mostrar_filtros(clave):
-    region_col, enfoque_col = st.columns(2)
+    region_col, categoria_col = st.columns(2)
     with region_col:
         region = st.selectbox("Región", REGIONES, key=f"{clave}_selector_region")
-    with enfoque_col:
-        enfoque = st.selectbox("Categoría", CATEGORIAS, key=f"{clave}_selector_enfoque")
-    return region, enfoque
+    with categoria_col:
+        categoria = st.selectbox(
+            "Categoría", CATEGORIAS, key=f"{clave}_selector_categoria"
+        )
+    return region, categoria
 
 
 def mostrar_explorar():
@@ -350,14 +352,14 @@ def mostrar_explorar():
         '<p class="temas-label">Descubrí qué está pasando</p>',
         unsafe_allow_html=True,
     )
-    region, enfoque = mostrar_filtros("explorar")
+    region, categoria = mostrar_filtros("explorar")
 
     filtros_cambiaron = (
         st.session_state.get("explorar_region") != region
-        or st.session_state.get("explorar_enfoque") != enfoque
+        or st.session_state.get("explorar_categoria") != categoria
     )
     if not st.session_state.get("explorar_noticias") or filtros_cambiaron:
-        obtener_noticias("Actualidad", region, enfoque, "explorar")
+        obtener_noticias("Actualidad", region, categoria, "explorar")
 
     mostrar_resultados("explorar", "Tendencias")
 
@@ -372,10 +374,10 @@ def mostrar_buscar():
         with boton:
             buscar = st.form_submit_button("Buscar", use_container_width=True)
 
-        region, enfoque = mostrar_filtros("buscar")
+        region, categoria = mostrar_filtros("buscar")
 
     if buscar:
-        obtener_noticias(busqueda, region, enfoque, "buscar")
+        obtener_noticias(busqueda, region, categoria, "buscar")
 
     if st.session_state.get("buscar_tema"):
         mostrar_resultados("buscar", "Resultados")
@@ -385,14 +387,14 @@ def mostrar_resultados(clave, titulo_seccion):
     tema = st.session_state[f"{clave}_tema"]
     noticias = st.session_state[f"{clave}_noticias"]
     region = st.session_state[f"{clave}_region"]
-    enfoque = st.session_state[f"{clave}_enfoque"]
+    categoria = st.session_state[f"{clave}_categoria"]
 
     st.markdown(
         f"""
         <div class="resultados-cabecera">
             <div>
                 <h2>{escape(titulo_seccion)}: {escape(tema)}</h2>
-                <p>{escape(region)} / {escape(enfoque)} / Noticias en español</p>
+                <p>{escape(region)} / {escape(categoria)} / Noticias en español</p>
             </div>
             <span class="contador">{len(noticias)} resultados</span>
         </div>

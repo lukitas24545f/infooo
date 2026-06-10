@@ -14,7 +14,7 @@ REGIONES = {
     "Europa": "Europa",
 }
 
-ENFOQUES = {
+CATEGORIAS = {
     "Todo": "",
     "Tecnología": "tecnología",
     "Deportes": "deportes",
@@ -24,18 +24,18 @@ ENFOQUES = {
 }
 
 
-def construir_consulta(tema, region="Global", enfoque="Todo"):
+def construir_consulta(tema, region="Global", categoria="Todo"):
     partes = [
-        ENFOQUES.get(enfoque, ""),
+        CATEGORIAS.get(categoria, ""),
         tema.strip(),
         REGIONES.get(region, ""),
     ]
     return " ".join(parte for parte in partes if parte)
 
 
-def buscar_noticias(tema, region="Global", enfoque="Todo"):
+def buscar_noticias(tema, region="Global", categoria="Todo"):
     noticias_encontradas = []
-    consulta = construir_consulta(tema, region, enfoque)
+    consulta = construir_consulta(tema, region, categoria)
     tema_url = quote_plus(consulta)
     url_busqueda = (
         f"https://news.google.com/rss/search?q={tema_url}"
